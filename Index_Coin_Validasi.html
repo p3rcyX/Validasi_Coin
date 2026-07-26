@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VALIDASI COIN DEPOSIT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #0a0d14;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            padding: 40px 24px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* ---- HEADER ---- */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-weight: 700;
+            font-size: 2rem;
+            letter-spacing: -0.5px;
+            color: #f1f5f9;
+        }
+
+        .header h1 span {
+            color: #3b82f6;
+        }
+
+        .header p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #64748b;
+            letter-spacing: 1px;
+            margin-top: 6px;
+        }
+
+        /* ---- CARD ---- */
+        .card {
+            background: #141b24;
+            border-radius: 16px;
+            padding: 28px 30px;
+            margin-bottom: 24px;
+            border: 1px solid #1e293b;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.2s;
+        }
+
+        .card:hover {
+            border-color: #2d3a4a;
+        }
+
+        .card-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #3b82f6;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-label::before {
+            content: '//';
+            color: #475569;
+        }
+
+        /* ---- TEXTAREA ---- */
+        textarea {
+            width: 100%;
+            height: 160px;
+            background: #0e141c;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+            color: #e2e8f0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            padding: 14px 16px;
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            border-color: #3b82f6;
+        }
+
+        textarea::placeholder {
+            color: #475569;
+        }
+
+        /* ---- DIVIDER ---- */
+        .or-divider {
+            text-align: center;
+            margin: 24px 0 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #475569;
+            letter-spacing: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #1e293b;
+        }
+
+        /* ---- UPLOAD AREA ---- */
+        .file-upload-area {
+            border: 2px dashed #1e293b;
+            border-radius: 12px;
+            padding: 32px 20px;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: #0e141c;
+        }
+
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background: #111a24;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #3b82f6;
+            background: #111a24;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 6px;
+            color: #64748b;
+        }
+
+        .file-upload-text {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+        .file-upload-text small {
+            color: #475569;
+        }
+
+        .file-upload-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+
+        .file-upload-btn {
+            display: inline-block;
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.8rem;
+            padding: 10px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .file-upload-btn:hover {
+            background: #2d3a4a;
+        }
+
+        .file-upload-btn.secondary {
+            background: transparent;
+            border: 1px solid #1e293b;
+        }
+
+        .file-upload-btn.secondary:hover {
+            background: #1e293b;
+            border-color: #3b82f6;
+        }
+
+        #fileInput { display: none; }
+
+        /* ---- FILE LIST ---- */
+        .file-list {
+            margin-top: 16px;
+            display: none;
+        }
+        .file-list.visible { display: block; }
+
+        .file-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .file-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #94a3b8;
+            letter-spacing: 0.5px;
+        }
+
+        .clear-all-btn {
+            background: transparent;
+            border: 1px solid #1e293b;
+            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            padding: 4px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .clear-all-btn:hover {
+            background: #1e293b;
+            color: #f1f5f9;
+        }
+
+        .file-items {
+            max-height: 180px;
+            overflow-y: auto;
+            border-radius: 8px;
+            background: #0a0d14;
+            border: 1px solid #1e293b;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 14px;
+            border-bottom: 1px solid #141b24;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+        }
+
+        .file-item:last-child { border-bottom: none; }
+        .file-item:hover { background: #111a24; }
+
+        .file-item-name { color: #e2e8f0; flex: 1; margin-right: 12px; word-break: break-all; }
+        .file-item-info { color: #64748b; font-size: 0.6rem; margin-right: 12px; white-space: nowrap; }
+        .file-item-remove {
+            background: transparent;
+            border: none;
+            color: #ef4444;
+            cursor: pointer;
+            font-size: 0.8rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .file-item-remove:hover { background: #1e293b; }
+
+        /* ---- MESSAGES ---- */
+        .error-msg {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #ef4444;
+            margin-top: 10px;
+            display: none;
+        }
+        .success-msg {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: #22c55e;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* ---- CONVERT BUTTON ---- */
+        .convert-wrap {
+            text-align: center;
+            margin: 24px 0 20px;
+        }
+
+        .convert-btn {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            padding: 14px 48px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .convert-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+        }
+
+        .convert-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ---- RESULT ---- */
+        .result-area { display: none; }
+        .result-area.visible { display: block; animation: fadeUp 0.3s ease both; }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ---- KPI GRID (elegant, minimal) ---- */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .kpi-card {
+            background: #0e141c;
+            border-radius: 12px;
+            padding: 16px 14px;
+            text-align: center;
+            border: 1px solid #1e293b;
+            transition: border-color 0.2s;
+        }
+
+        .kpi-card:hover {
+            border-color: #2d3a4a;
+        }
+
+        .kpi-bank {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #f1f5f9;
+            margin-bottom: 4px;
+        }
+
+        .kpi-count {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #60a5fa;
+        }
+
+        .kpi-count-label {
+            font-size: 0.6rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        .kpi-divider {
+            height: 1px;
+            background: #1e293b;
+            margin: 8px 0;
+        }
+
+        .kpi-nominal {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #34d399;
+        }
+
+        /* ---- TOTAL CARD ---- */
+        .total-card {
+            background: #0e141c;
+            border-radius: 12px;
+            padding: 24px 28px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            border: 1px solid #1e293b;
+            margin-top: 8px;
+        }
+
+        .total-item {
+            text-align: center;
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .total-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .total-value {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: #f1f5f9;
+            margin-top: 4px;
+        }
+
+        .total-value.rp {
+            color: #34d399;
+        }
+
+        .copy-summary-btn {
+            background: transparent;
+            border: 1px solid #1e293b;
+            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .copy-summary-btn:hover {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-color: #3b82f6;
+        }
+
+        .copy-summary-btn.copied {
+            background: #22c55e;
+            color: #fff;
+            border-color: #22c55e;
+        }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            body { padding: 24px 16px; }
+            .card { padding: 20px 18px; }
+            .header h1 { font-size: 1.5rem; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .total-card { flex-direction: column; align-items: stretch; padding: 20px; }
+            .total-item { min-width: auto; }
+            .convert-btn { width: 100%; padding: 14px 20px; }
+            textarea { height: 120px; font-size: 0.75rem; }
+            .file-upload-area { padding: 24px 16px; }
+            .file-upload-buttons { flex-direction: column; align-items: center; }
+            .file-upload-btn { width: 100%; max-width: 200px; }
+        }
+
+        @media (max-width: 480px) {
+            .kpi-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .kpi-card { padding: 12px 10px; }
+            .kpi-bank { font-size: 0.75rem; }
+            .kpi-count { font-size: 1.1rem; }
+            .kpi-nominal { font-size: 0.75rem; }
+            .total-value { font-size: 1.2rem; }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0a0d14; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2d3a4a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>VALIDASI <span>COIN_DEPOSIT</span></h1>
+            <p>// by. hokijitu | File + Manual</p>
+        </div>
+
+        <!-- INPUT -->
+        <div class="card">
+            <div class="card-label">INPUT DATA (MANUAL PASTE)</div>
+            <textarea id="inputData" placeholder="Copy dari Admin PNG di menu Laporan, Lalu paste disini..."></textarea>
+
+            <div class="or-divider">+ GABUNG DENGAN +</div>
+
+            <div class="card-label" style="margin-top:8px">UPLOAD FILE (CSV / EXCEL)</div>
+            <div class="file-upload-area" id="dropZone">
+                <div class="file-upload-icon">📁</div>
+                <div class="file-upload-text">DRAG & DROP FILE DISINI<br><small>.csv / .xlsx / .xls</small></div>
+                <div class="file-upload-buttons">
+                    <button class="file-upload-btn" onclick="document.getElementById('fileInput').click()">📂 PILIH FILE</button>
+                    <button class="file-upload-btn secondary" onclick="document.getElementById('fileInput').click()">➕ TAMBAH FILE</button>
+                </div>
+                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" multiple onchange="handleFileSelect(event)">
+            </div>
+
+            <div class="file-list" id="fileList">
+                <div class="file-list-header">
+                    <span class="file-count" id="fileCount">0 file</span>
+                    <button class="clear-all-btn" onclick="clearAllFiles()">🗑 HAPUS SEMUA</button>
+                </div>
+                <div class="file-items" id="fileItems"></div>
+            </div>
+
+            <div class="error-msg" id="errorMsg"></div>
+            <div class="success-msg" id="successMsg"></div>
+        </div>
+
+        <!-- CONVERT -->
+        <div class="convert-wrap">
+            <button class="convert-btn" id="convertBtn" onclick="doConvert()">⚡ CONVERT</button>
+        </div>
+
+        <!-- RESULT -->
+        <div class="result-area" id="resultArea">
+            <div class="card">
+                <div class="card-label">REKAP PER BANK</div>
+                <div class="kpi-grid" id="kpiGrid"></div>
+                <div class="total-card">
+                    <div class="total-item">
+                        <div class="total-label">Total Transaksi</div>
+                        <div class="total-value" id="totalCount">—</div>
+                    </div>
+                    <div class="total-item">
+                        <div class="total-label">Total Nominal</div>
+                        <div class="total-value rp" id="totalNominal">—</div>
+                    </div>
+                    <button class="copy-summary-btn" id="copyNominalBtn" onclick="copyNominal()">📋 COPY NOMINAL</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URUTAN BANK FIXED (14 bank)
+        const BANK_ORDER = [
+            'BCA', 'MANDIRI', 'BNI', 'BRI', 'DANAMON', 'CIMB', 'BSI', 'MAYBANK',
+            'DANA', 'OVO', 'GOPAY', 'LINKAJA', 'BANK JAGO', 'SEABANK'
+        ];
+
+        let parsedData = [];
+        let bankSummary = {};
+        let uploadedFiles = [];
+
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const successMsg = document.getElementById('successMsg');
+        const errorMsg = document.getElementById('errorMsg');
+        const fileList = document.getElementById('fileList');
+        const fileItems = document.getElementById('fileItems');
+        const fileCount = document.getElementById('fileCount');
+        const inputData = document.getElementById('inputData');
+
+        dropZone.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+        dropZone.addEventListener('dragleave', function() {
+            dropZone.classList.remove('dragover');
+        });
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            processMultipleFiles(Array.from(e.dataTransfer.files));
+        });
+        dropZone.addEventListener('click', function(e) {
+            if (e.target === dropZone || e.target.closest('.file-upload-text') || e.target.closest('.file-upload-icon') || e.target.closest('small')) {
+                fileInput.click();
+            }
+        });
+
+        function handleFileSelect(e) {
+            processMultipleFiles(Array.from(e.target.files));
+            fileInput.value = '';
+        }
+
+        function parseCSVLine(line, delimiter) {
+            const r = [];
+            let c = '',
+                q = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i],
+                    nxt = line[i + 1];
+                if (ch === '"') {
+                    if (q && nxt === '"') { c += '"';
+                        i++; } else q = !q;
+                } else if (ch === delimiter && !q) { r.push(c.trim());
+                    c = ''; } else c += ch;
+            }
+            r.push(c.trim());
+            return r;
+        }
+
+        function detectDelimiter(line) {
+            const co = (line.match(/,/g) || []).length,
+                ta = (line.match(/\t/g) || []).length,
+                se = (line.match(/;/g) || []).length;
+            if (ta > co && ta > se) return '\t';
+            if (se > co && se > ta) return ';';
+            return ',';
+        }
+
+        function processMultipleFiles(files) {
+            errorMsg.style.display = 'none';
+            let vc = 0,
+                tp = 0;
+            files.forEach(function(file) {
+                const fn = file.name.toLowerCase();
+                if (!fn.endsWith('.csv') && !fn.endsWith('.xlsx') && !fn.endsWith('.xls')) { tp++; return; }
+                if (file.size > 10 * 1024 * 1024) { tp++; return; }
+                if (fn.endsWith('.csv')) {
+                    const rd = new FileReader();
+                    rd.onload = function(e) {
+                        try {
+                            const lines = e.target.result.split(/\r?\n/).filter(function(l) { return l.trim(); });
+                            if (!lines.length) return;
+                            const data = lines.map(function(l) { return parseCSVLine(l, detectDelimiter(lines[0])); });
+                            addFileToList(file.name, data, 'CSV');
+                            vc++;
+                        } catch (err) {}
+                        tp++;
+                        if (tp >= files.length) updateMsg();
+                    };
+                    rd.onerror = function() { tp++;
+                        if (tp >= files.length) updateMsg(); };
+                    rd.readAsText(file, 'UTF-8');
+                } else {
+                    const rd = new FileReader();
+                    rd.onload = function(e) {
+                        try {
+                            const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                            const ed = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
+                            if (!ed || !ed.length) return;
+                            addFileToList(file.name, ed, 'Excel');
+                            vc++;
+                        } catch (err) {}
+                        tp++;
+                        if (tp >= files.length) updateMsg();
+                    };
+                    rd.onerror = function() { tp++;
+                        if (tp >= files.length) updateMsg(); };
+                    rd.readAsArrayBuffer(file);
+                }
+            });
+        }
+
+        function updateMsg() {
+            const hm = inputData.value.trim() !== '';
+            const tf = uploadedFiles.length;
+            let msg = '';
+            if (tf > 0) msg += '✅ ' + tf + ' file (' + uploadedFiles.reduce(function(s, f) { return s + f.rowCount; }, 0) + ' baris)';
+            if (hm) msg += (msg ? ' + ' : '✅ ') + 'data manual';
+            if (msg) msg += ' siap diproses.';
+            if (msg) { successMsg.textContent = msg;
+                successMsg.style.display = 'block';
+                errorMsg.style.display = 'none'; }
+        }
+
+        function addFileToList(name, data, type) {
+            let fn = name;
+            if (uploadedFiles.find(function(f) { return f.name === fn; })) {
+                const base = fn.replace(/\.\w+$/, ''),
+                    ext = fn.split('.').pop();
+                let c = 1;
+                while (uploadedFiles.find(function(f) { return f.name === base + '_' + c + '.' + ext; })) c++;
+                fn = base + '_' + c + '.' + ext;
+            }
+            uploadedFiles.push({ name: fn, data: data, type: type, rowCount: data.length });
+            renderFileList();
+        }
+
+        function removeFile(i) { uploadedFiles.splice(i, 1);
+            renderFileList();
+            updateMsg(); }
+
+        function clearAllFiles() { uploadedFiles = [];
+            renderFileList();
+            successMsg.style.display = 'none';
+            errorMsg.style.display = 'none';
+            updateMsg(); }
+
+        function renderFileList() {
+            if (!uploadedFiles.length) { fileList.classList.remove('visible'); return; }
+            fileList.classList.add('visible');
+            fileCount.textContent = uploadedFiles.length + ' file (' + uploadedFiles.reduce(function(s, f) { return s + f.rowCount; }, 0) + ' baris)';
+            fileItems.innerHTML = uploadedFiles.map(function(f, i) { return '<div class="file-item"><span class="file-item-name">📄 ' + f.name + '</span><span class="file-item-info">' + f.type + ' | ' + f.rowCount + ' baris</span><button class="file-item-remove" onclick="removeFile(' + i + ')">✕</button></div>'; }).join('');
+        }
+
+        function showError(m) { errorMsg.textContent = m;
+            errorMsg.style.display = 'block';
+            successMsg.style.display = 'none'; }
+
+        function parseNominal(str) {
+            if (!str) return 0;
+            let cleaned = String(str).trim().replace(/[^\d.,]/g, '');
+            if (!cleaned) return 0;
+            const hc = cleaned.includes(','),
+                hd = cleaned.includes('.');
+            if (hd && !hc) { const ld = cleaned.lastIndexOf('.'),
+                    ad = cleaned.substring(ld + 1); if (ad === '000' || ad === '00' || ad === '0') cleaned = cleaned.substring(0, ld);
+                else if (ad.length === 3 && /^\d{3}$/.test(ad)) cleaned = cleaned.replace(/\./g, ''); }
+            if (hc && !hd) { const parts = cleaned.split(','),
+                    lp = parts[parts.length - 1]; if (lp.length === 3 && /^\d{3}$/.test(lp)) cleaned = cleaned.replace(/,/g, '');
+                else if (lp.length <= 2) { const lc = cleaned.lastIndexOf(',');
+                    cleaned = cleaned.substring(0, lc) + '.' + cleaned.substring(lc + 1); } }
+            if (hc && hd) cleaned = cleaned.replace(/,/g, '');
+            const r = parseFloat(cleaned);
+            return isNaN(r) ? 0 : r;
+        }
+
+        function formatNominal(num) { return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+        function getFirstWord(s) { if (!s) return ''; const m = String(s).trim().match(/^([^\s,]+)/); return m ? m[1].toUpperCase() : ''; }
+
+        function isHeaderRow(row) {
+            if (!row || !row.length) return false;
+            const kw = ['tanggal penerimaan', 'tanggal', 'no', 'nomor', 'no.', '#', 'id', 'userid', 'user id', 'tindakan', 'dari nama bank', 'dari rekening bank', 'dari bank', 'tujuan bank', 'rekening tujuan bank', 'nama tujuan bank', 'jumlah', 'status', 'operator'];
+            return kw.includes(String(row[0] || '').toLowerCase().trim());
+        }
+
+        function detectIndexForRow(row, dJ, dB) {
+            const len = row.length;
+            if (len >= 10) return { idxJumlah: 9, idxTujuanBank: 6 };
+            if (len === 9) return { idxJumlah: 6, idxTujuanBank: 5 };
+            if (len === 8) return { idxJumlah: 5, idxTujuanBank: 4 };
+            return { idxJumlah: dJ, idxTujuanBank: dB };
+        }
+
+        function normalizeBankName(name) {
+            const upper = name.toUpperCase().trim();
+            const bankMap = {
+                'BCA': 'BCA',
+                'MANDIRI': 'MANDIRI',
+                'BNI': 'BNI',
+                'BRI': 'BRI',
+                'DANAMON': 'DANAMON',
+                'CIMB': 'CIMB',
+                'CIMB NIAGA': 'CIMB',
+                'BSI': 'BSI',
+                'MAYBANK': 'MAYBANK',
+                'DANA': 'DANA',
+                'OVO': 'OVO',
+                'GOPAY': 'GOPAY',
+                'LINK AJA': 'LINKAJA',
+                'LINKAJA': 'LINKAJA',
+                'BANK JAGO': 'BANK JAGO',
+                'JAGO': 'BANK JAGO',
+                'SEABANK': 'SEABANK'
+            };
+            if (bankMap[upper]) return bankMap[upper];
+            for (const key in bankMap) {
+                if (upper.includes(key)) return bankMap[key];
+            }
+            return name;
+        }
+
+        function doConvert() {
+            errorMsg.style.display = 'none';
+            let allData = [];
+            if (uploadedFiles.length) { uploadedFiles.forEach(function(f) { allData = allData.concat(f.data); }); }
+            const raw = inputData.value.trim();
+            if (raw) { const lines = raw.split('\n').filter(function(l) { return l.trim(); }); const del = detectDelimiter(lines[0] || ''); const md = lines.map(function(l) { return l.includes('\t') ? l.split('\t').map(function(c) { return c.trim(); }) : parseCSVLine(l, del); });
+                allData = allData.concat(md); }
+            if (!allData.length) { showError('⚠ Data kosong.'); return; }
+            let gJ = 9,
+                gB = 6;
+            if (allData.length > 0 && isHeaderRow(allData[0])) { const hr = allData[0].map(function(h) { return String(h).toLowerCase().trim(); }); const fj = hr.findIndex(function(h) { return h === 'jumlah' || h.includes('jumlah'); }); const fb = hr.findIndex(function(h) { return h === 'tujuan bank' || h.includes('tujuan bank'); }); if (fj >= 0) gJ = fj; if (fb >= 0) gB = fb; }
+            parsedData = [];
+            bankSummary = {};
+
+            BANK_ORDER.forEach(function(b) {
+                bankSummary[b] = { count: 0, total: 0 };
+            });
+
+            let skipped = 0,
+                hdrSkip = 0;
+            for (let i = 0; i < allData.length; i++) { const row = allData[i]; if (isHeaderRow(row)) { hdrSkip++; continue; } const { idxJumlah, idxTujuanBank } = detectIndexForRow(row, gJ, gB); if (row.length < Math.max(idxJumlah, idxTujuanBank) + 1) { skipped++; continue; } let nominalStr = String(row[idxJumlah] || '').trim(); let bank = String(row[idxTujuanBank] || '').trim(); if (!nominalStr || nominalStr === '0') { skipped++; continue; }
+                bank = getFirstWord(bank);
+                bank = normalizeBankName(bank);
+                const nv = parseNominal(nominalStr); if (nv <= 0) { skipped++; continue; }
+                parsedData.push({ nominal: nominalStr, bank: bank, cleanNominal: nv });
+                if (bankSummary[bank]) {
+                    bankSummary[bank].count++;
+                    bankSummary[bank].total += nv;
+                } }
+            if (!parsedData.length) { showError('⚠ Tidak ada data valid.'); return; }
+            const si = []; if (uploadedFiles.length) si.push(uploadedFiles.length + ' file'); if (raw) si.push('manual paste');
+            successMsg.textContent = '✅ ' + parsedData.length + ' transaksi dari ' + si.join(' + ') + ' berhasil diproses!';
+            successMsg.style.display = 'block';
+            renderSummary();
+            document.getElementById('resultArea').classList.add('visible');
+            document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const btn = document.getElementById('convertBtn');
+            btn.textContent = '✅ BERHASIL!';
+            setTimeout(function() { btn.textContent = '⚡ CONVERT'; }, 1500);
+        }
+
+        function renderSummary() {
+            const banks = BANK_ORDER;
+            let gt = 0,
+                gc = 0;
+
+            const grid = document.getElementById('kpiGrid');
+            grid.innerHTML = '';
+
+            banks.forEach(function(b) {
+                const d = bankSummary[b] || { count: 0, total: 0 };
+                gt += d.total;
+                gc += d.count;
+
+                const card = document.createElement('div');
+                card.className = 'kpi-card';
+                card.innerHTML = `
+                    <div class="kpi-bank">${b}</div>
+                    <div class="kpi-count">${d.count}</div>
+                    <div class="kpi-count-label">transaksi</div>
+                    <div class="kpi-divider"></div>
+                    <div class="kpi-nominal">Rp ${formatNominal(d.total)}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('totalCount').textContent = gc + ' transaksi';
+            document.getElementById('totalNominal').textContent = 'Rp ' + formatNominal(gt);
+        }
+
+        function copyNominal() {
+            const banks = BANK_ORDER;
+            if (!banks.length) return;
+            const text = banks.map(function(b) { return b + '\t'; }).join('\t') + '\n' + banks.map(function() { return 'TOTAL FORM\tTOTAL KOIN'; }).join('\t') + '\n' + banks.map(function(b) { const d = bankSummary[b] || { count: 0, total: 0 }; return d.count + '\t' + formatNominal(d.total); }).join('\t');
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = document.getElementById('copyNominalBtn');
+                btn.textContent = '✅ Tersalin!';
+                btn.classList.add('copied');
+                setTimeout(function() { btn.textContent = '📋 COPY NOMINAL';
+                    btn.classList.remove('copied'); }, 2000);
+            }).catch(function() {
+                const el = document.createElement('textarea');
+                el.value = text;
+                el.style.position = 'absolute';
+                el.style.left = '-9999px';
+                document.body.appendChild(el);
+                el.select();
+                document.execCommand('copy');
+                document.body.removeChild(el);
+            });
+        }
+    </script>
+</body>
+</html>
