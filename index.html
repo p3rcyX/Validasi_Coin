@@ -457,6 +457,272 @@
             border-color: #22c55e;
         }
 
+        /* ---- OPERATOR VALIDATION ---- */
+        .operator-actions {
+            text-align: center;
+            margin-top: 18px;
+        }
+
+        .operator-result { display: none; margin-top: 20px; }
+        .operator-result.visible { display: block; animation: fadeUp 0.3s ease both; }
+
+        .operator-status {
+            padding: 14px 18px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            margin-bottom: 14px;
+        }
+
+        .operator-status.match {
+            color: #bbf7d0;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .operator-status.mismatch {
+            color: #fecaca;
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .operator-table-wrap {
+            overflow-x: auto;
+            border: 1px solid #1e293b;
+            border-radius: 10px;
+        }
+
+        .operator-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 680px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+        }
+
+        .operator-table th,
+        .operator-table td {
+            padding: 11px 12px;
+            border-bottom: 1px solid #1e293b;
+            text-align: right;
+        }
+
+        .operator-table th {
+            background: #0a0d14;
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-size: 0.62rem;
+            letter-spacing: 0.5px;
+        }
+
+        .operator-table th:first-child,
+        .operator-table td:first-child { text-align: left; }
+        .operator-table tr:last-child td { border-bottom: none; }
+        .operator-table tr.row-mismatch { background: rgba(239, 68, 68, 0.06); }
+        .status-ok { color: #22c55e; font-weight: 600; }
+        .status-bad { color: #ef4444; font-weight: 600; }
+
+        /* ---- REFINED LAYOUT ---- */
+        body {
+            background:
+                radial-gradient(circle at 15% 0%, rgba(59, 130, 246, 0.10), transparent 32%),
+                radial-gradient(circle at 90% 20%, rgba(52, 211, 153, 0.06), transparent 28%),
+                #080c12;
+            padding: 48px 24px 72px;
+        }
+
+        .container { max-width: 1680px; }
+
+        .workspace-grid {
+            display: grid;
+            grid-template-columns: minmax(560px, 0.9fr) minmax(720px, 1.1fr);
+            gap: 24px;
+            align-items: start;
+        }
+
+        .left-workflow,
+        .right-workflow { min-width: 0; }
+
+        .header {
+            margin-bottom: 48px;
+            padding: 8px 0;
+        }
+
+        .header h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); }
+        .header p { margin-top: 10px; }
+
+        .section-block { margin-bottom: 32px; }
+
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 0 4px 14px;
+        }
+
+        .section-number {
+            width: 30px;
+            height: 30px;
+            display: grid;
+            place-items: center;
+            flex: 0 0 auto;
+            border-radius: 9px;
+            color: #93c5fd;
+            background: rgba(59, 130, 246, 0.12);
+            border: 1px solid rgba(59, 130, 246, 0.28);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            color: #f8fafc;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .section-description {
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.64rem;
+            margin-top: 3px;
+        }
+
+        .card {
+            background: rgba(18, 25, 35, 0.94);
+            border-color: #202c3b;
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.24);
+        }
+
+        .transaction-input-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: stretch;
+        }
+
+        .input-panel {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-panel textarea { flex: 1; min-height: 165px; }
+
+        .file-upload-area {
+            min-height: 155px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .or-divider.compact {
+            display: none;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-top: 22px;
+            padding-top: 20px;
+            border-top: 1px solid #1e293b;
+        }
+
+        .message-area { min-width: 0; flex: 1; }
+        .message-area .error-msg,
+        .message-area .success-msg { margin-top: 0; }
+        .convert-wrap { margin: 0; flex: 0 0 auto; }
+        .convert-btn { min-width: 190px; }
+
+        .result-area .card { border-color: rgba(59, 130, 246, 0.26); }
+
+        .kpi-grid {
+            grid-template-columns: repeat(4, minmax(110px, 1fr));
+            gap: 10px;
+        }
+
+        .kpi-card { padding: 16px 10px; }
+
+        #operatorInput {
+            min-height: 230px;
+            max-height: 360px;
+        }
+
+        .right-workflow .card { margin-bottom: 0; }
+
+        .operator-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 18px;
+        }
+
+        .operator-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
+            margin-bottom: 16px;
+        }
+
+        .operator-table-wrap {
+            max-height: calc(100vh - 430px);
+            min-height: 260px;
+            overflow: auto;
+            background: #0b1017;
+            border-color: #263345;
+        }
+
+        .operator-table { min-width: 760px; font-size: 0.74rem; }
+
+        .operator-table th {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            padding: 12px 16px;
+            background: #111924;
+            color: #94a3b8;
+            box-shadow: 0 1px 0 #263345;
+        }
+
+        .operator-table td { padding: 13px 16px; }
+        .operator-table th:first-child,
+        .operator-table td:first-child { width: 30%; }
+        .operator-table tbody tr { transition: background 0.15s ease; }
+        .operator-table tbody tr:hover { background: rgba(59, 130, 246, 0.06); }
+
+        @media (min-width: 1101px) {
+            .right-workflow {
+                position: sticky;
+                top: 20px;
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .workspace-grid { grid-template-columns: 1fr; }
+            .operator-table-wrap { max-height: 520px; }
+        }
+
+        .status-ok,
+        .status-bad {
+            font-size: 0.62rem;
+            letter-spacing: 0.4px;
+        }
+
+        .operator-table td.status-ok,
+        .operator-table td.status-bad {
+            text-align: center;
+            border-left: 8px solid #0b1017;
+            border-right: 8px solid #0b1017;
+            font-size: 0.62rem;
+            letter-spacing: 0.4px;
+        }
+
+        .status-ok { background: rgba(34, 197, 94, 0.12); }
+        .status-bad { background: rgba(239, 68, 68, 0.12); }
+
         /* ---- RESPONSIVE ---- */
         @media (max-width: 768px) {
             body { padding: 24px 16px; }
@@ -470,6 +736,13 @@
             .file-upload-area { padding: 24px 16px; }
             .file-upload-buttons { flex-direction: column; align-items: center; }
             .file-upload-btn { width: 100%; max-width: 200px; }
+            .transaction-input-grid { grid-template-columns: 1fr; }
+            .input-panel textarea, .file-upload-area { min-height: 170px; }
+            .card-footer { flex-direction: column; align-items: stretch; }
+            .section-heading { align-items: flex-start; }
+            .operator-actions { justify-content: stretch; }
+            .operator-actions .convert-btn { width: 100%; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 480px) {
@@ -495,40 +768,57 @@
             <p>// by. hokijitu | File + Manual</p>
         </div>
 
-        <!-- INPUT -->
-        <div class="card">
-            <div class="card-label">INPUT DATA (MANUAL PASTE)</div>
-            <textarea id="inputData" placeholder="Copy dari Admin PNG di menu Laporan, Lalu paste disini..."></textarea>
+        <main class="workspace-grid">
+        <div class="left-workflow">
 
-            <div class="or-divider">+ GABUNG DENGAN +</div>
-
-            <div class="card-label" style="margin-top:8px">UPLOAD FILE (CSV / EXCEL)</div>
-            <div class="file-upload-area" id="dropZone">
-                <div class="file-upload-icon">📁</div>
-                <div class="file-upload-text">DRAG & DROP FILE DISINI<br><small>.csv / .xlsx / .xls</small></div>
-                <div class="file-upload-buttons">
-                    <button class="file-upload-btn" onclick="document.getElementById('fileInput').click()">📂 PILIH FILE</button>
-                    <button class="file-upload-btn secondary" onclick="document.getElementById('fileInput').click()">➕ TAMBAH FILE</button>
+        <!-- TRANSACTION INPUT -->
+        <section class="section-block">
+            <div class="section-heading">
+                <span class="section-number">01</span>
+                <div>
+                    <div class="section-title">Data Transaksi Deposit</div>
+                    <div class="section-description">Masukkan data secara manual, melalui file, atau gabungkan keduanya.</div>
                 </div>
-                <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" multiple onchange="handleFileSelect(event)">
             </div>
-
-            <div class="file-list" id="fileList">
-                <div class="file-list-header">
-                    <span class="file-count" id="fileCount">0 file</span>
-                    <button class="clear-all-btn" onclick="clearAllFiles()">🗑 HAPUS SEMUA</button>
+            <div class="card">
+                <div class="transaction-input-grid">
+                    <div class="input-panel">
+                        <div class="card-label">INPUT DATA (MANUAL PASTE)</div>
+                        <textarea id="inputData" placeholder="Copy dari Admin PNG di menu Laporan, lalu paste di sini..."></textarea>
+                    </div>
+                    <div class="input-panel">
+                        <div class="card-label">UPLOAD FILE (CSV / EXCEL)</div>
+                        <div class="file-upload-area" id="dropZone">
+                            <div class="file-upload-icon">📁</div>
+                            <div class="file-upload-text">DRAG & DROP FILE DI SINI<br><small>.csv / .xlsx / .xls</small></div>
+                            <div class="file-upload-buttons">
+                                <button class="file-upload-btn" onclick="document.getElementById('fileInput').click()">📂 PILIH FILE</button>
+                                <button class="file-upload-btn secondary" onclick="document.getElementById('fileInput').click()">➕ TAMBAH FILE</button>
+                            </div>
+                            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" multiple onchange="handleFileSelect(event)">
+                        </div>
+                    </div>
                 </div>
-                <div class="file-items" id="fileItems"></div>
+
+                <div class="file-list" id="fileList">
+                    <div class="file-list-header">
+                        <span class="file-count" id="fileCount">0 file</span>
+                        <button class="clear-all-btn" onclick="clearAllFiles()">🗑 HAPUS SEMUA</button>
+                    </div>
+                    <div class="file-items" id="fileItems"></div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="message-area">
+                        <div class="error-msg" id="errorMsg"></div>
+                        <div class="success-msg" id="successMsg"></div>
+                    </div>
+                    <div class="convert-wrap">
+                        <button class="convert-btn" id="convertBtn" onclick="doConvert()">⚡ CONVERT</button>
+                    </div>
+                </div>
             </div>
-
-            <div class="error-msg" id="errorMsg"></div>
-            <div class="success-msg" id="successMsg"></div>
-        </div>
-
-        <!-- CONVERT -->
-        <div class="convert-wrap">
-            <button class="convert-btn" id="convertBtn" onclick="doConvert()">⚡ CONVERT</button>
-        </div>
+        </section>
 
         <!-- RESULT -->
         <div class="result-area" id="resultArea">
@@ -548,6 +838,44 @@
                 </div>
             </div>
         </div>
+
+        </div>
+
+        <!-- OPERATOR VALIDATION -->
+        <section class="section-block right-workflow">
+            <div class="section-heading">
+                <span class="section-number">02</span>
+                <div>
+                    <div class="section-title">Validasi Data Operator</div>
+                    <div class="section-description">Cocokkan total transaksi dengan kolom DEPOSIT pada laporan operator.</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-label">INPUT DATA OPERATOR (MANUAL PASTE)</div>
+                <textarea id="operatorInput" placeholder="Paste laporan operator di sini, termasuk header No, OPERATOR, DEPOSIT, dan seterusnya..."></textarea>
+                <div class="operator-actions">
+                    <button class="convert-btn" id="operatorConvertBtn" onclick="validateOperators()">🔎 VALIDASI OPERATOR</button>
+                </div>
+                <div class="operator-result" id="operatorResult">
+                    <div class="operator-status" id="operatorStatus"></div>
+                    <div class="operator-table-wrap">
+                        <table class="operator-table">
+                            <thead>
+                                <tr>
+                                    <th>Operator</th>
+                                    <th>Data Transaksi</th>
+                                    <th>Data Operator</th>
+                                    <th>Selisih</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="operatorTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
     </div>
 
     <script>
@@ -862,6 +1190,136 @@
                 el.select();
                 document.execCommand('copy');
                 document.body.removeChild(el);
+            });
+        }
+
+        function getAllTransactionRows() {
+            let rows = [];
+            uploadedFiles.forEach(function(f) { rows = rows.concat(f.data); });
+
+            const raw = inputData.value.trim();
+            if (raw) {
+                const lines = raw.split(/\r?\n/).filter(function(line) { return line.trim(); });
+                const delimiter = detectDelimiter(lines[0] || '');
+                rows = rows.concat(lines.map(function(line) {
+                    return line.includes('\t')
+                        ? line.split('\t').map(function(cell) { return cell.trim(); })
+                        : parseCSVLine(line, delimiter);
+                }));
+            }
+            return rows;
+        }
+
+        function normalizeOperatorName(value) {
+            return String(value || '').trim().replace(/\s+/g, ' ').toUpperCase();
+        }
+
+        function parseOperatorReport(raw) {
+            const lines = raw.split(/\r?\n/).filter(function(line) { return line.trim(); });
+            if (!lines.length) return { error: '⚠ Data operator kosong.' };
+
+            const delimiter = detectDelimiter(lines[0]);
+            const rows = lines.map(function(line) {
+                return line.includes('\t')
+                    ? line.split('\t').map(function(cell) { return cell.trim(); })
+                    : parseCSVLine(line, delimiter);
+            });
+
+            const header = rows[0].map(function(cell) { return String(cell).trim().toUpperCase(); });
+            const operatorIndex = header.indexOf('OPERATOR');
+            const depositIndex = header.indexOf('DEPOSIT');
+            if (operatorIndex < 0 || depositIndex < 0) {
+                return { error: '⚠ Header OPERATOR atau DEPOSIT tidak ditemukan.' };
+            }
+
+            const totals = {};
+            const displayNames = {};
+            for (let i = 1; i < rows.length; i++) {
+                const name = String(rows[i][operatorIndex] || '').trim();
+                const key = normalizeOperatorName(name);
+                const deposit = parseNominal(rows[i][depositIndex]);
+                if (!key || deposit <= 0) continue;
+                totals[key] = (totals[key] || 0) + deposit;
+                if (!displayNames[key]) displayNames[key] = name;
+            }
+            return { totals: totals, displayNames: displayNames };
+        }
+
+        function getTransactionOperatorTotals(rows) {
+            const totals = {};
+            const displayNames = {};
+            let globalJumlah = 9;
+
+            if (rows.length && isHeaderRow(rows[0])) {
+                const header = rows[0].map(function(cell) { return String(cell).toLowerCase().trim(); });
+                const foundJumlah = header.findIndex(function(cell) { return cell === 'jumlah' || cell.includes('jumlah'); });
+                if (foundJumlah >= 0) globalJumlah = foundJumlah;
+            }
+
+            rows.forEach(function(row) {
+                if (!row || !row.length || isHeaderRow(row)) return;
+                const indexes = detectIndexForRow(row, globalJumlah, 6);
+                const operatorName = String(row[row.length - 1] || '').trim();
+                const key = normalizeOperatorName(operatorName);
+                const nominal = parseNominal(row[indexes.idxJumlah]);
+                if (!key || nominal <= 0) return;
+                totals[key] = (totals[key] || 0) + nominal;
+                if (!displayNames[key]) displayNames[key] = operatorName;
+            });
+
+            return { totals: totals, displayNames: displayNames };
+        }
+
+        function validateOperators() {
+            errorMsg.style.display = 'none';
+            const reportRaw = document.getElementById('operatorInput').value.trim();
+            const rows = getAllTransactionRows();
+            if (!rows.length) { showError('⚠ Masukkan data transaksi terlebih dahulu.'); return; }
+            if (!reportRaw) { showError('⚠ Masukkan data operator terlebih dahulu.'); return; }
+
+            const report = parseOperatorReport(reportRaw);
+            if (report.error) { showError(report.error); return; }
+
+            const transactions = getTransactionOperatorTotals(rows);
+            const keys = Array.from(new Set(
+                Object.keys(transactions.totals).concat(Object.keys(report.totals))
+            )).sort();
+
+            if (!keys.length) { showError('⚠ Tidak ada data operator dengan deposit yang dapat divalidasi.'); return; }
+
+            let allMatch = true;
+            const body = document.getElementById('operatorTableBody');
+            body.innerHTML = keys.map(function(key) {
+                const transactionTotal = transactions.totals[key] || 0;
+                const reportTotal = report.totals[key] || 0;
+                const difference = transactionTotal - reportTotal;
+                const match = difference === 0;
+                if (!match) allMatch = false;
+                const name = transactions.displayNames[key] || report.displayNames[key] || key;
+                return '<tr class="' + (match ? '' : 'row-mismatch') + '">' +
+                    '<td>' + escapeHtml(name) + '</td>' +
+                    '<td>Rp ' + formatNominal(transactionTotal) + '</td>' +
+                    '<td>Rp ' + formatNominal(reportTotal) + '</td>' +
+                    '<td>' + (difference > 0 ? '+' : '') + formatNominal(difference) + '</td>' +
+                    '<td class="' + (match ? 'status-ok' : 'status-bad') + '">' + (match ? 'SESUAI' : 'TIDAK SESUAI') + '</td>' +
+                    '</tr>';
+            }).join('');
+
+            const status = document.getElementById('operatorStatus');
+            status.textContent = allMatch ? '✅ SESUAI SEMUA' : '❌ OPERATOR TIDAK SESUAI';
+            status.className = 'operator-status ' + (allMatch ? 'match' : 'mismatch');
+            const result = document.getElementById('operatorResult');
+            result.classList.add('visible');
+            result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            const btn = document.getElementById('operatorConvertBtn');
+            btn.textContent = allMatch ? '✅ SESUAI SEMUA' : '❌ TIDAK SESUAI';
+            setTimeout(function() { btn.textContent = '🔎 VALIDASI OPERATOR'; }, 1800);
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>'"]/g, function(character) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character];
             });
         }
     </script>
