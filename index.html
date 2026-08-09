@@ -951,41 +951,73 @@
             errorMsg.style.display = 'none';
             let vc = 0,
                 tp = 0;
+
+            const fileErrors = [];
+
+            function finishFile() {
+                tp++;
+                if (tp < files.length) return;
+                if (vc > 0) {
+                    updateMsg();
+                } else if (fileErrors.length) {
+                    showError('⚠ File gagal dibaca: ' + fileErrors.join(' | '));
+                }
+            }
+
             files.forEach(function(file) {
                 const fn = file.name.toLowerCase();
-                if (!fn.endsWith('.csv') && !fn.endsWith('.xlsx') && !fn.endsWith('.xls')) { tp++; return; }
-                if (file.size > 10 * 1024 * 1024) { tp++; return; }
+                if (!fn.endsWith('.csv') && !fn.endsWith('.xlsx') && !fn.endsWith('.xls')) {
+                    fileErrors.push(file.name + ' (format tidak didukung)');
+                    finishFile();
+                    return;
+                }
+                if (file.size > 10 * 1024 * 1024) {
+                    fileErrors.push(file.name + ' (lebih dari 10 MB)');
+                    finishFile();
+                    return;
+                }
                 if (fn.endsWith('.csv')) {
                     const rd = new FileReader();
                     rd.onload = function(e) {
                         try {
-                            const lines = e.target.result.split(/\r?\n/).filter(function(l) { return l.trim(); });
-                            if (!lines.length) return;
+                            const csvText = String(e.target.result || '').replace(/^\uFEFF/, '');
+                            const lines = csvText.split(/\r?\n/).filter(function(l) { return l.trim(); });
+                            if (!lines.length) throw new Error('file kosong');
                             const data = lines.map(function(l) { return parseCSVLine(l, detectDelimiter(lines[0])); });
                             addFileToList(file.name, data, 'CSV');
                             vc++;
-                        } catch (err) {}
-                        tp++;
-                        if (tp >= files.length) updateMsg();
+                        } catch (err) {
+                            fileErrors.push(file.name + ' (' + (err.message || 'CSV tidak valid') + ')');
+                        } finally {
+                            finishFile();
+                        }
                     };
-                    rd.onerror = function() { tp++;
-                        if (tp >= files.length) updateMsg(); };
+                    rd.onerror = function() {
+                        fileErrors.push(file.name + ' (gagal dibaca browser)');
+                        finishFile();
+                    };
                     rd.readAsText(file, 'UTF-8');
                 } else {
                     const rd = new FileReader();
                     rd.onload = function(e) {
                         try {
+                            if (typeof XLSX === 'undefined') throw new Error('library Excel gagal dimuat');
                             const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+                            if (!wb.SheetNames || !wb.SheetNames.length) throw new Error('sheet tidak ditemukan');
                             const ed = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
-                            if (!ed || !ed.length) return;
+                            if (!ed || !ed.length) throw new Error('sheet kosong');
                             addFileToList(file.name, ed, 'Excel');
                             vc++;
-                        } catch (err) {}
-                        tp++;
-                        if (tp >= files.length) updateMsg();
+                        } catch (err) {
+                            fileErrors.push(file.name + ' (' + (err.message || 'Excel tidak valid') + ')');
+                        } finally {
+                            finishFile();
+                        }
                     };
-                    rd.onerror = function() { tp++;
-                        if (tp >= files.length) updateMsg(); };
+                    rd.onerror = function() {
+                        fileErrors.push(file.name + ' (gagal dibaca browser)');
+                        finishFile();
+                    };
                     rd.readAsArrayBuffer(file);
                 }
             });
@@ -1062,11 +1094,26 @@
         function isHeaderRow(row) {
             if (!row || !row.length) return false;
             const kw = ['tanggal penerimaan', 'tanggal', 'no', 'nomor', 'no.', '#', 'id', 'userid', 'user id', 'tindakan', 'dari nama bank', 'dari rekening bank', 'dari bank', 'tujuan bank', 'rekening tujuan bank', 'nama tujuan bank', 'jumlah', 'status', 'operator'];
-            return kw.includes(String(row[0] || '').toLowerCase().trim());
+            const cells = row.map(function(cell) { return String(cell || '').replace(/^\uFEFF/, '').toLowerCase().trim(); });
+            const hasJumlah = cells.some(function(cell) { return cell === 'jumlah' || cell.includes('jumlah'); });
+            const hasTujuanBank = cells.some(function(cell) { return cell === 'tujuan bank' || cell.includes('tujuan bank'); });
+            return kw.includes(cells[0]) || (hasJumlah && hasTujuanBank);
+        }
+
+        function detectHeaderIndexes(row) {
+            const header = (row || []).map(function(cell) { return String(cell || '').replace(/^\uFEFF/, '').toLowerCase().trim(); });
+            return {
+                idxJumlah: header.findIndex(function(cell) { return cell === 'jumlah' || cell.includes('jumlah'); }),
+                idxTujuanBank: header.findIndex(function(cell) { return cell === 'tujuan bank' || cell.includes('tujuan bank'); }),
+                idxOperator: header.findIndex(function(cell) { return cell === 'operator' || cell.includes('operator'); })
+            };
         }
 
         function detectIndexForRow(row, dJ, dB) {
             const len = row.length;
+            if (Number.isInteger(dJ) && dJ >= 0 && dJ < len && Number.isInteger(dB) && dB >= 0 && dB < len) {
+                return { idxJumlah: dJ, idxTujuanBank: dB };
+            }
             if (len >= 10) return { idxJumlah: 9, idxTujuanBank: 6 };
             if (len === 9) return { idxJumlah: 6, idxTujuanBank: 5 };
             if (len === 8) return { idxJumlah: 5, idxTujuanBank: 4 };
@@ -1103,15 +1150,14 @@
 
         function doConvert() {
             errorMsg.style.display = 'none';
-            let allData = [];
-            if (uploadedFiles.length) { uploadedFiles.forEach(function(f) { allData = allData.concat(f.data); }); }
+            const dataSources = [];
+            if (uploadedFiles.length) {
+                uploadedFiles.forEach(function(f) { dataSources.push(f.data); });
+            }
             const raw = inputData.value.trim();
             if (raw) { const lines = raw.split('\n').filter(function(l) { return l.trim(); }); const del = detectDelimiter(lines[0] || ''); const md = lines.map(function(l) { return l.includes('\t') ? l.split('\t').map(function(c) { return c.trim(); }) : parseCSVLine(l, del); });
-                allData = allData.concat(md); }
-            if (!allData.length) { showError('⚠ Data kosong.'); return; }
-            let gJ = 9,
-                gB = 6;
-            if (allData.length > 0 && isHeaderRow(allData[0])) { const hr = allData[0].map(function(h) { return String(h).toLowerCase().trim(); }); const fj = hr.findIndex(function(h) { return h === 'jumlah' || h.includes('jumlah'); }); const fb = hr.findIndex(function(h) { return h === 'tujuan bank' || h.includes('tujuan bank'); }); if (fj >= 0) gJ = fj; if (fb >= 0) gB = fb; }
+                dataSources.push(md); }
+            if (!dataSources.length) { showError('⚠ Data kosong.'); return; }
             parsedData = [];
             bankSummary = {};
 
@@ -1121,15 +1167,44 @@
 
             let skipped = 0,
                 hdrSkip = 0;
-            for (let i = 0; i < allData.length; i++) { const row = allData[i]; if (isHeaderRow(row)) { hdrSkip++; continue; } const { idxJumlah, idxTujuanBank } = detectIndexForRow(row, gJ, gB); if (row.length < Math.max(idxJumlah, idxTujuanBank) + 1) { skipped++; continue; } let nominalStr = String(row[idxJumlah] || '').trim(); let bank = String(row[idxTujuanBank] || '').trim(); if (!nominalStr || nominalStr === '0') { skipped++; continue; }
-                bank = getFirstWord(bank);
-                bank = normalizeBankName(bank);
-                const nv = parseNominal(nominalStr); if (nv <= 0) { skipped++; continue; }
-                parsedData.push({ nominal: nominalStr, bank: bank, cleanNominal: nv });
-                if (bankSummary[bank]) {
-                    bankSummary[bank].count++;
-                    bankSummary[bank].total += nv;
-                } }
+            dataSources.forEach(function(sourceRows) {
+                let sourceJumlah = null;
+                let sourceBank = null;
+
+                for (let i = 0; i < sourceRows.length; i++) {
+                    const row = sourceRows[i];
+                    if (!row || !row.length) { skipped++; continue; }
+
+                    if (isHeaderRow(row)) {
+                        const headerIndexes = detectHeaderIndexes(row);
+                        if (headerIndexes.idxJumlah >= 0) sourceJumlah = headerIndexes.idxJumlah;
+                        if (headerIndexes.idxTujuanBank >= 0) sourceBank = headerIndexes.idxTujuanBank;
+                        hdrSkip++;
+                        continue;
+                    }
+
+                    const indexes = detectIndexForRow(row, sourceJumlah, sourceBank);
+                    const idxJumlah = indexes.idxJumlah;
+                    const idxTujuanBank = indexes.idxTujuanBank;
+                    if (!Number.isInteger(idxJumlah) || !Number.isInteger(idxTujuanBank) || row.length < Math.max(idxJumlah, idxTujuanBank) + 1) {
+                        skipped++;
+                        continue;
+                    }
+
+                    let nominalStr = String(row[idxJumlah] || '').trim();
+                    let bank = String(row[idxTujuanBank] || '').trim();
+                    if (!nominalStr || nominalStr === '0') { skipped++; continue; }
+                    bank = getFirstWord(bank);
+                    bank = normalizeBankName(bank);
+                    const nv = parseNominal(nominalStr);
+                    if (nv <= 0) { skipped++; continue; }
+                    parsedData.push({ nominal: nominalStr, bank: bank, cleanNominal: nv });
+                    if (bankSummary[bank]) {
+                        bankSummary[bank].count++;
+                        bankSummary[bank].total += nv;
+                    }
+                }
+            });
             if (!parsedData.length) { showError('⚠ Tidak ada data valid.'); return; }
             const si = []; if (uploadedFiles.length) si.push(uploadedFiles.length + ' file'); if (raw) si.push('manual paste');
             successMsg.textContent = '✅ ' + parsedData.length + ' transaksi dari ' + si.join(' + ') + ' berhasil diproses!';
@@ -1248,18 +1323,24 @@
         function getTransactionOperatorTotals(rows) {
             const totals = {};
             const displayNames = {};
-            let globalJumlah = 9;
-
-            if (rows.length && isHeaderRow(rows[0])) {
-                const header = rows[0].map(function(cell) { return String(cell).toLowerCase().trim(); });
-                const foundJumlah = header.findIndex(function(cell) { return cell === 'jumlah' || cell.includes('jumlah'); });
-                if (foundJumlah >= 0) globalJumlah = foundJumlah;
-            }
+            let globalJumlah = null;
+            let globalBank = null;
+            let globalOperator = null;
 
             rows.forEach(function(row) {
-                if (!row || !row.length || isHeaderRow(row)) return;
-                const indexes = detectIndexForRow(row, globalJumlah, 6);
-                const operatorName = String(row[row.length - 1] || '').trim();
+                if (!row || !row.length) return;
+                if (isHeaderRow(row)) {
+                    const headerIndexes = detectHeaderIndexes(row);
+                    if (headerIndexes.idxJumlah >= 0) globalJumlah = headerIndexes.idxJumlah;
+                    if (headerIndexes.idxTujuanBank >= 0) globalBank = headerIndexes.idxTujuanBank;
+                    if (headerIndexes.idxOperator >= 0) globalOperator = headerIndexes.idxOperator;
+                    return;
+                }
+                const indexes = detectIndexForRow(row, globalJumlah, globalBank);
+                const operatorIndex = Number.isInteger(globalOperator) && globalOperator >= 0 && globalOperator < row.length
+                    ? globalOperator
+                    : row.length - 1;
+                const operatorName = String(row[operatorIndex] || '').trim();
                 const key = normalizeOperatorName(operatorName);
                 const nominal = parseNominal(row[indexes.idxJumlah]);
                 if (!key || nominal <= 0) return;
