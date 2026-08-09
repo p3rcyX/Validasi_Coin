@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VALIDASI COIN DEPOSIT</title>
+    <title>​𝐕𝐀𝐋𝐈𝐃𝐀𝐒𝐈 𝐂𝐎𝐈𝐍 𝐃𝐄𝐏𝐎𝐒𝐈𝐓​</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2300e5a0'/%3E%3Ctext x='50' y='68' text-anchor='middle' font-size='50' font-weight='bold' fill='%23000'%3EVD%3C/text%3E%3C/svg%3E">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'"></script>
     
     
     <style>
@@ -325,6 +326,13 @@
 
         .convert-btn:active {
             transform: scale(0.98);
+        }
+
+        .convert-btn:disabled {
+            opacity: 0.65;
+            cursor: wait;
+            transform: none;
+            box-shadow: none;
         }
 
         /* ---- RESULT ---- */
@@ -754,19 +762,397 @@
             .total-value { font-size: 1.2rem; }
         }
 
-        /* scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #0a0d14; }
-        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #2d3a4a; }
+        /* ---- HOKIJITU AZURE COMMAND CENTER ---- */
+        :root {
+            --azure-bg: #050b14;
+            --azure-surface: #0b1522;
+            --azure-surface-2: #101e2e;
+            --azure-surface-3: #14263a;
+            --azure-line: rgba(130, 173, 219, 0.16);
+            --azure-line-strong: rgba(33, 184, 246, 0.32);
+            --azure-blue: #087ceb;
+            --azure-cyan: #21b8f6;
+            --azure-gold: #d5a738;
+            --azure-text: #f4f8fc;
+            --azure-muted: #8fa4ba;
+            --azure-dim: #5d7187;
+            --azure-success: #2dd783;
+            --azure-error: #ff5c6c;
+            --azure-radius: 16px;
+            --azure-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+        }
+
+        html { background: var(--azure-bg); }
+
+        body {
+            min-height: 100vh;
+            padding: 0;
+            display: block;
+            overflow: hidden;
+            color: var(--azure-text);
+            background:
+                radial-gradient(circle at 7% -8%, rgba(8, 124, 235, 0.18), transparent 30%),
+                radial-gradient(circle at 88% 5%, rgba(33, 184, 246, 0.08), transparent 27%),
+                linear-gradient(145deg, #050b14 0%, #07111d 48%, #050a12 100%);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.18;
+            background-image:
+                linear-gradient(rgba(78, 142, 201, 0.07) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(78, 142, 201, 0.07) 1px, transparent 1px);
+            background-size: 44px 44px;
+            mask-image: linear-gradient(to bottom, black, transparent 56%);
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1780px;
+            height: 100vh;
+            margin: 0 auto;
+            padding: 18px 24px 22px;
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr) auto;
+            gap: 16px;
+        }
+
+        .header {
+            min-height: 78px;
+            margin: 0;
+            padding: 10px 16px 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            text-align: left;
+            border: 1px solid var(--azure-line);
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(16, 30, 46, 0.94), rgba(9, 19, 31, 0.94));
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.24), inset 0 1px rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+        }
+
+        .brand-lockup { display: flex; align-items: center; min-width: 0; gap: 16px; }
+
+        .brand-logo {
+            width: 190px;
+            height: 54px;
+            flex: 0 0 190px;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(213, 167, 56, 0.3);
+            background-color: #f8fafc;
+            background-image: url('https://cdn.areabermain.club/assets/cdn/az5/2026/08/10/20260810/bcc7babf6bc74261fb35d8eddf0fced2/logo.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 230px 126px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+        }
+
+        .header-copy { min-width: 0; }
+        .eyebrow {
+            margin-bottom: 3px;
+            color: var(--azure-cyan);
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: 0.6rem;
+            font-weight: 600;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--azure-text);
+            font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+            line-height: 1.2;
+            letter-spacing: -0.025em;
+        }
+        .header h1 span { color: var(--azure-text); }
+        .header p {
+            margin: 4px 0 0;
+            color: var(--azure-muted);
+            font-family: Inter, ui-sans-serif, sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 0;
+        }
+
+        .system-state {
+            flex: 0 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 9px 13px;
+            color: #bff8db;
+            border: 1px solid rgba(45, 215, 131, 0.22);
+            border-radius: 999px;
+            background: rgba(45, 215, 131, 0.07);
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: 0.62rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+        .state-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--azure-success);
+            box-shadow: 0 0 0 4px rgba(45, 215, 131, 0.1), 0 0 16px rgba(45, 215, 131, 0.65);
+        }
+
+        .workspace-grid {
+            min-height: 0;
+            height: 100%;
+            display: grid;
+            grid-template-columns: minmax(540px, 0.87fr) minmax(680px, 1.13fr);
+            gap: 16px;
+            align-items: stretch;
+        }
+
+        .left-workflow,
+        .right-workflow {
+            min-width: 0;
+            min-height: 0;
+            height: 100%;
+            overflow: auto;
+            scrollbar-gutter: stable;
+        }
+        .right-workflow { position: static; top: auto; }
+
+        .section-block { margin: 0 0 14px; }
+        .section-heading { margin: 0 4px 10px; gap: 10px; }
+        .section-number {
+            width: 27px;
+            height: 27px;
+            border-radius: 8px;
+            color: #d4f3ff;
+            border-color: rgba(33, 184, 246, 0.28);
+            background: linear-gradient(145deg, rgba(8, 124, 235, 0.2), rgba(33, 184, 246, 0.06));
+            box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+        }
+        .section-title { color: var(--azure-text); font-size: 0.84rem; letter-spacing: 0.01em; }
+        .section-description { color: var(--azure-dim); font-size: 0.58rem; }
+
+        .card {
+            margin-bottom: 14px;
+            padding: 19px;
+            border: 1px solid var(--azure-line);
+            border-radius: var(--azure-radius);
+            background: linear-gradient(150deg, rgba(15, 29, 45, 0.97), rgba(9, 19, 31, 0.97));
+            box-shadow: var(--azure-shadow), inset 0 1px rgba(255, 255, 255, 0.025);
+            transition: border-color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+        }
+        .card:hover { border-color: rgba(104, 161, 214, 0.24); }
+        .result-area .card { border-color: rgba(8, 124, 235, 0.22); }
+
+        .card-label {
+            margin-bottom: 9px;
+            color: #a9ddf5;
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: 0.58rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+        }
+        .card-label::before { content: ''; width: 14px; height: 1px; background: var(--azure-gold); box-shadow: 0 0 8px rgba(213,167,56,.5); }
+
+        .transaction-input-grid { grid-template-columns: 1fr; gap: 14px; }
+        .input-panel textarea { min-height: 132px; }
+        textarea {
+            min-height: 132px;
+            padding: 13px 14px;
+            color: #dfeaf4;
+            border: 1px solid var(--azure-line);
+            border-radius: 12px;
+            background: rgba(3, 10, 18, 0.66);
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: 0.72rem;
+            line-height: 1.55;
+            caret-color: var(--azure-cyan);
+            transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+        }
+        textarea:hover { border-color: rgba(102, 155, 205, 0.28); }
+        textarea:focus {
+            border-color: rgba(33, 184, 246, 0.55);
+            background: rgba(4, 13, 23, 0.88);
+            box-shadow: 0 0 0 3px rgba(33, 184, 246, 0.08), 0 0 30px rgba(8, 124, 235, 0.08);
+        }
+        textarea::placeholder { color: #4f6479; }
+
+        .file-upload-area {
+            min-height: 118px;
+            padding: 18px;
+            border: 1px dashed rgba(82, 146, 204, 0.3);
+            border-radius: 13px;
+            background: linear-gradient(145deg, rgba(8, 124, 235, 0.055), rgba(33, 184, 246, 0.015));
+        }
+        .file-upload-area:hover,
+        .file-upload-area.dragover {
+            border-color: rgba(33, 184, 246, 0.58);
+            background: rgba(8, 124, 235, 0.09);
+            box-shadow: inset 0 0 35px rgba(8, 124, 235, 0.045);
+        }
+        .file-upload-icon { margin: 0 0 2px; color: var(--azure-cyan); font-size: 1.35rem; filter: saturate(.8); }
+        .file-upload-text { color: #b2c6d8; font-size: 0.66rem; }
+        .file-upload-text small { color: var(--azure-dim); }
+        .file-upload-buttons { margin-top: 11px; }
+        .file-upload-btn {
+            padding: 8px 16px;
+            color: #d9e8f5;
+            border: 1px solid var(--azure-line);
+            border-radius: 9px;
+            background: var(--azure-surface-3);
+            font-size: 0.68rem;
+            font-weight: 650;
+        }
+        .file-upload-btn:hover { background: #17304a; border-color: var(--azure-line-strong); }
+        .file-upload-btn.secondary { background: transparent; border-color: var(--azure-line); }
+
+        .file-list { margin-top: 13px; }
+        .file-items { max-height: 118px; border-color: var(--azure-line); background: rgba(3, 9, 16, 0.6); }
+        .file-item { border-color: rgba(130,173,219,.08); font-size: .65rem; }
+        .file-item:hover { background: rgba(8,124,235,.06); }
+        .file-count, .file-item-info { color: var(--azure-muted); }
+        .clear-all-btn { border-color: var(--azure-line); color: var(--azure-muted); }
+
+        .card-footer { margin-top: 15px; padding-top: 15px; border-color: var(--azure-line); }
+        .error-msg, .success-msg { font-size: .67rem; }
+        .error-msg { color: #ff8792; }
+        .success-msg { color: #67e8aa; }
+
+        .convert-btn {
+            min-width: 174px;
+            padding: 11px 20px;
+            border-radius: 10px;
+            color: white;
+            background: linear-gradient(135deg, #087ceb, #1457c5);
+            box-shadow: 0 10px 28px rgba(8, 124, 235, 0.22), inset 0 1px rgba(255,255,255,.18);
+            font-size: .76rem;
+            font-weight: 750;
+            letter-spacing: .045em;
+        }
+        .convert-btn:hover { background: linear-gradient(135deg, #1492f4, #1765d5); box-shadow: 0 14px 32px rgba(8,124,235,.3); }
+        .convert-btn:focus-visible,
+        .file-upload-btn:focus-visible,
+        .copy-summary-btn:focus-visible,
+        .clear-all-btn:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(33,184,246,.16); }
+
+        .kpi-grid { grid-template-columns: repeat(4, minmax(104px, 1fr)); gap: 8px; }
+        .kpi-card {
+            padding: 12px 9px;
+            border-color: rgba(130,173,219,.13);
+            border-radius: 11px;
+            background: linear-gradient(145deg, rgba(16, 35, 54, .82), rgba(8, 18, 29, .82));
+        }
+        .kpi-card:hover { border-color: rgba(33,184,246,.3); transform: translateY(-1px); }
+        .kpi-bank { color: #c9d9e8; font-size: .7rem; }
+        .kpi-count { color: #5cc9fb; font-size: 1rem; font-variant-numeric: tabular-nums; }
+        .kpi-count-label { color: var(--azure-dim); font-size: .52rem; }
+        .kpi-divider { margin: 6px 0; background: var(--azure-line); }
+        .kpi-nominal { color: #75e5b2; font-size: .68rem; font-variant-numeric: tabular-nums; }
+
+        .total-card {
+            margin-top: 13px;
+            padding: 15px 18px;
+            border-color: rgba(213,167,56,.18);
+            background: linear-gradient(120deg, rgba(213,167,56,.055), rgba(8,124,235,.045));
+        }
+        .total-label { color: var(--azure-dim); }
+        .total-value { color: #eff6fc; font-size: 1.12rem; font-variant-numeric: tabular-nums; }
+        .total-value.rp { color: #78e5b4; }
+        .copy-summary-btn { border-color: var(--azure-line); color: #b8cad9; background: rgba(16,30,46,.7); }
+        .copy-summary-btn:hover { border-color: rgba(33,184,246,.38); background: #13283d; }
+
+        #operatorInput { min-height: 172px; max-height: 230px; }
+        .operator-actions { margin-top: 13px; }
+        .operator-result { margin-top: 15px; }
+        .operator-status { min-height: 44px; margin-bottom: 11px; border-radius: 11px; font-size: .76rem; }
+        .operator-status.match { color: #bcf7d8; border-color: rgba(45,215,131,.25); background: rgba(45,215,131,.075); }
+        .operator-status.mismatch { color: #ffd0d5; border-color: rgba(255,92,108,.27); background: rgba(255,92,108,.075); }
+
+        .operator-table-wrap {
+            min-height: 250px;
+            max-height: calc(100vh - 410px);
+            border-color: var(--azure-line);
+            border-radius: 12px;
+            background: rgba(3, 9, 16, .72);
+        }
+        .operator-table { min-width: 760px; font-size: .68rem; font-variant-numeric: tabular-nums; }
+        .operator-table th {
+            padding: 11px 13px;
+            color: #7891a8;
+            border-color: var(--azure-line);
+            background: #0d1a28;
+            font-size: .56rem;
+            letter-spacing: .08em;
+        }
+        .operator-table td { padding: 11px 13px; border-color: rgba(130,173,219,.09); color: #bfcedb; }
+        .operator-table tbody tr:nth-child(even) { background: rgba(91,132,170,.025); }
+        .operator-table tbody tr:hover { background: rgba(8,124,235,.075); }
+        .operator-table tr.row-mismatch { background: rgba(255,92,108,.055); }
+        .operator-table td.status-ok { color: #60e6a3; background: rgba(45,215,131,.065); }
+        .operator-table td.status-bad { color: #ff8591; background: rgba(255,92,108,.065); }
+
+        .app-footer {
+            padding: 4px 6px 0;
+            display: flex;
+            justify-content: space-between;
+            color: #465b70;
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: .52rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #1b3349; border-radius: 999px; }
+        ::-webkit-scrollbar-thumb:hover { background: #28506f; }
+
+        @media (max-width: 1180px) {
+            body { overflow: auto; }
+            .container { height: auto; min-height: 100vh; }
+            .workspace-grid { grid-template-columns: 1fr; }
+            .left-workflow, .right-workflow { height: auto; overflow: visible; }
+            .operator-table-wrap { max-height: 520px; }
+        }
+
+        @media (max-width: 720px) {
+            .container { padding: 10px; gap: 10px; }
+            .header { padding: 10px; border-radius: 14px; }
+            .brand-logo { width: 132px; flex-basis: 132px; height: 46px; background-size: 178px 97px; }
+            .eyebrow, .header p, .system-state { display: none; }
+            .header h1 { font-size: .93rem; }
+            .card { padding: 15px; }
+            .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .total-card { flex-direction: column; }
+            .convert-btn { width: 100%; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>VALIDASI <span>COIN_DEPOSIT</span></h1>
-            <p>// by. hokijitu | File + Manual</p>
-        </div>
+        <header class="header">
+            <div class="brand-lockup">
+                <div class="brand-logo" role="img" aria-label="Logo HOKIJITU"></div>
+                <div class="header-copy">
+                    <div class="eyebrow">Azure Command Center</div>
+                    <h1>𝐕𝐀𝐋𝐈𝐃𝐀𝐒𝐈 𝐂𝐎𝐈𝐍 𝐃𝐄𝐏𝐎𝐒𝐈𝐓</h1>
+                    <p>Bank reconciliation &amp; operator validation workspace</p>
+                </div>
+            </div>
+            <div class="system-state"><span class="state-dot"></span>System ready</div>
+        </header>
 
         <main class="workspace-grid">
         <div class="left-workflow">
@@ -792,8 +1178,8 @@
                             <div class="file-upload-icon">📁</div>
                             <div class="file-upload-text">DRAG & DROP FILE DI SINI<br><small>.csv / .xlsx / .xls</small></div>
                             <div class="file-upload-buttons">
-                                <button class="file-upload-btn" onclick="document.getElementById('fileInput').click()">📂 PILIH FILE</button>
-                                <button class="file-upload-btn secondary" onclick="document.getElementById('fileInput').click()">➕ TAMBAH FILE</button>
+                                <button class="file-upload-btn" onclick="document.getElementById('fileInput').click()">PILIH FILE</button>
+                                <button class="file-upload-btn secondary" onclick="document.getElementById('fileInput').click()">TAMBAH FILE</button>
                             </div>
                             <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" multiple onchange="handleFileSelect(event)">
                         </div>
@@ -803,18 +1189,18 @@
                 <div class="file-list" id="fileList">
                     <div class="file-list-header">
                         <span class="file-count" id="fileCount">0 file</span>
-                        <button class="clear-all-btn" onclick="clearAllFiles()">🗑 HAPUS SEMUA</button>
+                        <button class="clear-all-btn" onclick="clearAllFiles()">HAPUS SEMUA</button>
                     </div>
                     <div class="file-items" id="fileItems"></div>
                 </div>
 
                 <div class="card-footer">
                     <div class="message-area">
-                        <div class="error-msg" id="errorMsg"></div>
-                        <div class="success-msg" id="successMsg"></div>
+                        <div class="error-msg" id="errorMsg" role="alert" aria-live="assertive"></div>
+                        <div class="success-msg" id="successMsg" role="status" aria-live="polite"></div>
                     </div>
                     <div class="convert-wrap">
-                        <button class="convert-btn" id="convertBtn" onclick="doConvert()">⚡ CONVERT</button>
+                        <button class="convert-btn" id="convertBtn" onclick="doConvert()">PROSES REKAP</button>
                     </div>
                 </div>
             </div>
@@ -834,7 +1220,7 @@
                         <div class="total-label">Total Nominal</div>
                         <div class="total-value rp" id="totalNominal">—</div>
                     </div>
-                    <button class="copy-summary-btn" id="copyNominalBtn" onclick="copyNominal()">📋 COPY NOMINAL</button>
+                    <button class="copy-summary-btn" id="copyNominalBtn" onclick="copyNominal()">SALIN REKAP</button>
                 </div>
             </div>
         </div>
@@ -854,7 +1240,7 @@
                 <div class="card-label">INPUT DATA OPERATOR (MANUAL PASTE)</div>
                 <textarea id="operatorInput" placeholder="Paste laporan operator di sini, termasuk header No, OPERATOR, DEPOSIT, dan seterusnya..."></textarea>
                 <div class="operator-actions">
-                    <button class="convert-btn" id="operatorConvertBtn" onclick="validateOperators()">🔎 VALIDASI OPERATOR</button>
+                    <button class="convert-btn" id="operatorConvertBtn" onclick="validateOperators()">VALIDASI OPERATOR</button>
                 </div>
                 <div class="operator-result" id="operatorResult">
                     <div class="operator-status" id="operatorStatus"></div>
@@ -876,6 +1262,7 @@
             </div>
         </section>
         </main>
+        <footer class="app-footer"><span>HOKIJITU Operations</span><span>Secure local processing</span></footer>
     </div>
 
     <script>
@@ -888,6 +1275,7 @@
         let parsedData = [];
         let bankSummary = {};
         let uploadedFiles = [];
+        let filesBeingRead = 0;
 
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
@@ -938,17 +1326,46 @@
             return r;
         }
 
+        function countDelimiterOutsideQuotes(line, delimiter) {
+            let count = 0;
+            let quoted = false;
+            for (let i = 0; i < String(line || '').length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (quoted && line[i + 1] === '"') i++;
+                    else quoted = !quoted;
+                } else if (ch === delimiter && !quoted) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         function detectDelimiter(line) {
-            const co = (line.match(/,/g) || []).length,
-                ta = (line.match(/\t/g) || []).length,
-                se = (line.match(/;/g) || []).length;
+            const co = countDelimiterOutsideQuotes(line, ','),
+                ta = countDelimiterOutsideQuotes(line, '\t'),
+                se = countDelimiterOutsideQuotes(line, ';');
             if (ta > co && ta > se) return '\t';
             if (se > co && se > ta) return ';';
             return ',';
         }
 
+        function setFileReadingState() {
+            const btn = document.getElementById('convertBtn');
+            if (!btn) return;
+            const reading = filesBeingRead > 0;
+            btn.disabled = reading;
+            btn.textContent = reading ? 'MEMBACA FILE...' : 'PROSES REKAP';
+        }
+
         function processMultipleFiles(files) {
             errorMsg.style.display = 'none';
+            if (!files || !files.length) {
+                showError('⚠ Tidak ada file yang dipilih.');
+                return;
+            }
+            filesBeingRead += files.length;
+            setFileReadingState();
             let vc = 0,
                 tp = 0;
 
@@ -956,6 +1373,8 @@
 
             function finishFile() {
                 tp++;
+                filesBeingRead = Math.max(0, filesBeingRead - 1);
+                setFileReadingState();
                 if (tp < files.length) return;
                 if (vc > 0) {
                     updateMsg();
@@ -1004,7 +1423,14 @@
                             if (typeof XLSX === 'undefined') throw new Error('library Excel gagal dimuat');
                             const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
                             if (!wb.SheetNames || !wb.SheetNames.length) throw new Error('sheet tidak ditemukan');
-                            const ed = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1, defval: '' });
+                            let ed = [];
+                            wb.SheetNames.forEach(function(sheetName) {
+                                const sheetRows = XLSX.utils.sheet_to_json(wb.Sheets[sheetName], { header: 1, defval: '', raw: true });
+                                const nonEmptyRows = (sheetRows || []).filter(function(row) {
+                                    return Array.isArray(row) && row.some(function(cell) { return String(cell ?? '').trim() !== ''; });
+                                });
+                                if (nonEmptyRows.length) ed = ed.concat(nonEmptyRows);
+                            });
                             if (!ed || !ed.length) throw new Error('sheet kosong');
                             addFileToList(file.name, ed, 'Excel');
                             vc++;
@@ -1062,7 +1488,7 @@
             if (!uploadedFiles.length) { fileList.classList.remove('visible'); return; }
             fileList.classList.add('visible');
             fileCount.textContent = uploadedFiles.length + ' file (' + uploadedFiles.reduce(function(s, f) { return s + f.rowCount; }, 0) + ' baris)';
-            fileItems.innerHTML = uploadedFiles.map(function(f, i) { return '<div class="file-item"><span class="file-item-name">📄 ' + f.name + '</span><span class="file-item-info">' + f.type + ' | ' + f.rowCount + ' baris</span><button class="file-item-remove" onclick="removeFile(' + i + ')">✕</button></div>'; }).join('');
+            fileItems.innerHTML = uploadedFiles.map(function(f, i) { return '<div class="file-item"><span class="file-item-name">📄 ' + escapeHtml(f.name) + '</span><span class="file-item-info">' + escapeHtml(f.type) + ' | ' + f.rowCount + ' baris</span><button class="file-item-remove" onclick="removeFile(' + i + ')">✕</button></div>'; }).join('');
         }
 
         function showError(m) { errorMsg.textContent = m;
@@ -1095,16 +1521,26 @@
             if (!row || !row.length) return false;
             const kw = ['tanggal penerimaan', 'tanggal', 'no', 'nomor', 'no.', '#', 'id', 'userid', 'user id', 'tindakan', 'dari nama bank', 'dari rekening bank', 'dari bank', 'tujuan bank', 'rekening tujuan bank', 'nama tujuan bank', 'jumlah', 'status', 'operator'];
             const cells = row.map(function(cell) { return String(cell || '').replace(/^\uFEFF/, '').toLowerCase().trim(); });
-            const hasJumlah = cells.some(function(cell) { return cell === 'jumlah' || cell.includes('jumlah'); });
-            const hasTujuanBank = cells.some(function(cell) { return cell === 'tujuan bank' || cell.includes('tujuan bank'); });
+            const hasJumlah = cells.some(isAmountHeader);
+            const hasTujuanBank = cells.some(isDestinationBankHeader);
             return kw.includes(cells[0]) || (hasJumlah && hasTujuanBank);
+        }
+
+        function isAmountHeader(cell) {
+            cell = String(cell || '').toLowerCase().trim();
+            return cell === 'jumlah' || cell.includes('jumlah') || cell === 'nominal' || cell.includes('nominal') || cell === 'amount';
+        }
+
+        function isDestinationBankHeader(cell) {
+            cell = String(cell || '').toLowerCase().trim();
+            return cell === 'tujuan bank' || cell.includes('tujuan bank') || cell === 'bank tujuan' || cell.includes('bank tujuan') || cell.includes('rekening tujuan');
         }
 
         function detectHeaderIndexes(row) {
             const header = (row || []).map(function(cell) { return String(cell || '').replace(/^\uFEFF/, '').toLowerCase().trim(); });
             return {
-                idxJumlah: header.findIndex(function(cell) { return cell === 'jumlah' || cell.includes('jumlah'); }),
-                idxTujuanBank: header.findIndex(function(cell) { return cell === 'tujuan bank' || cell.includes('tujuan bank'); }),
+                idxJumlah: header.findIndex(isAmountHeader),
+                idxTujuanBank: header.findIndex(isDestinationBankHeader),
                 idxOperator: header.findIndex(function(cell) { return cell === 'operator' || cell.includes('operator'); })
             };
         }
@@ -1150,6 +1586,7 @@
 
         function doConvert() {
             errorMsg.style.display = 'none';
+            if (filesBeingRead > 0) { showError('⚠ File masih dibaca. Tunggu sampai tombol CONVERT aktif kembali.'); return; }
             const dataSources = [];
             if (uploadedFiles.length) {
                 uploadedFiles.forEach(function(f) { dataSources.push(f.data); });
@@ -1194,7 +1631,6 @@
                     let nominalStr = String(row[idxJumlah] || '').trim();
                     let bank = String(row[idxTujuanBank] || '').trim();
                     if (!nominalStr || nominalStr === '0') { skipped++; continue; }
-                    bank = getFirstWord(bank);
                     bank = normalizeBankName(bank);
                     const nv = parseNominal(nominalStr);
                     if (nv <= 0) { skipped++; continue; }
@@ -1213,8 +1649,8 @@
             document.getElementById('resultArea').classList.add('visible');
             document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
             const btn = document.getElementById('convertBtn');
-            btn.textContent = '✅ BERHASIL!';
-            setTimeout(function() { btn.textContent = '⚡ CONVERT'; }, 1500);
+            btn.textContent = 'REKAP SELESAI';
+            setTimeout(function() { btn.textContent = 'PROSES REKAP'; }, 1500);
         }
 
         function renderSummary() {
@@ -1252,9 +1688,9 @@
             const text = banks.map(function(b) { return b + '\t'; }).join('\t') + '\n' + banks.map(function() { return 'TOTAL FORM\tTOTAL KOIN'; }).join('\t') + '\n' + banks.map(function(b) { const d = bankSummary[b] || { count: 0, total: 0 }; return d.count + '\t' + formatNominal(d.total); }).join('\t');
             navigator.clipboard.writeText(text).then(function() {
                 const btn = document.getElementById('copyNominalBtn');
-                btn.textContent = '✅ Tersalin!';
+                btn.textContent = 'TERSALIN';
                 btn.classList.add('copied');
-                setTimeout(function() { btn.textContent = '📋 COPY NOMINAL';
+                setTimeout(function() { btn.textContent = 'SALIN REKAP';
                     btn.classList.remove('copied'); }, 2000);
             }).catch(function() {
                 const el = document.createElement('textarea');
@@ -1339,7 +1775,12 @@
                 const indexes = detectIndexForRow(row, globalJumlah, globalBank);
                 const operatorIndex = Number.isInteger(globalOperator) && globalOperator >= 0 && globalOperator < row.length
                     ? globalOperator
-                    : row.length - 1;
+                    : (function() {
+                        for (let i = row.length - 1; i >= 0; i--) {
+                            if (String(row[i] ?? '').trim() !== '') return i;
+                        }
+                        return row.length - 1;
+                    })();
                 const operatorName = String(row[operatorIndex] || '').trim();
                 const key = normalizeOperatorName(operatorName);
                 const nominal = parseNominal(row[indexes.idxJumlah]);
@@ -1394,8 +1835,8 @@
             result.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
             const btn = document.getElementById('operatorConvertBtn');
-            btn.textContent = allMatch ? '✅ SESUAI SEMUA' : '❌ TIDAK SESUAI';
-            setTimeout(function() { btn.textContent = '🔎 VALIDASI OPERATOR'; }, 1800);
+            btn.textContent = allMatch ? 'SESUAI SEMUA' : 'TIDAK SESUAI';
+            setTimeout(function() { btn.textContent = 'VALIDASI OPERATOR'; }, 1800);
         }
 
         function escapeHtml(value) {
